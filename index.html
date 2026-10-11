@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Packet Tracer Exam Guide (Lab 9-13)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        .nav-item.active { background-color: #1e3a8a; border-left: 4px solid #3b82f6; font-weight: bold; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .cli-box { background-color: #000; color: #0f0; font-family: 'Courier New', Courier, monospace; }
+        .cli-comment { color: #888; }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans flex h-screen overflow-hidden text-gray-800">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-72 bg-slate-900 text-white flex flex-col h-full shadow-2xl z-10">
+        <div class="p-6 border-b border-slate-700">
+            <h1 class="text-2xl font-extrabold text-blue-400">Packet Tracer</h1>
+            <p class="text-sm text-slate-400 mt-1">Exam Config Cheat Sheet</p>
+        </div>
+        <nav class="flex-1 flex flex-col gap-2 p-4 overflow-y-auto">
+            <button onclick="openTab('cheat')" id="btn-cheat" class="nav-item text-left px-4 py-3 rounded-lg hover:bg-slate-800 transition text-yellow-400 font-bold border-b border-slate-700 pb-4 mb-2">🔥 Exam Cheat Sheet</button>
+            <button onclick="openTab('lab9')" id="btn-lab9" class="nav-item active text-left px-4 py-3 rounded-lg hover:bg-slate-800 transition">Lab 9: VLAN & Trunk</button>
+            <button onclick="openTab('lab10')" id="btn-lab10" class="nav-item text-left px-4 py-3 rounded-lg hover:bg-slate-800 transition">Lab 10: VTP & Inter-VLAN</button>
+            <button onclick="openTab('lab11')" id="btn-lab11" class="nav-item text-left px-4 py-3 rounded-lg hover:bg-slate-800 transition">Lab 11: Spanning Tree</button>
+            <button onclick="openTab('lab12')" id="btn-lab12" class="nav-item text-left px-4 py-3 rounded-lg hover:bg-slate-800 transition">Lab 12: EtherChannel</button>
+            <button onclick="openTab('lab13')" id="btn-lab13" class="nav-item text-left px-4 py-3 rounded-lg hover:bg-slate-800 transition">Lab 13: WLC-PT & Server</button>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8 overflow-y-auto bg-slate-100">
+        
+        <!-- ======================= Exam Cheat Sheet ======================= -->
+        <section id="cheat" class="tab-content max-w-5xl mx-auto">
+            <div class="flex items-center justify-between mb-6 border-b-2 border-slate-200 pb-4">
+                <h2 class="text-3xl font-bold text-slate-800">Exam Cheat Sheet & Tricks</h2>
+                <span class="bg-yellow-100 text-yellow-800 text-sm font-semibold px-3 py-1 rounded">Quick Reference</span>
+            </div>
+            
+            <div class="space-y-6">
+                <!-- Trick 1 -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-800 border-l-4 border-slate-500 p-4">
+                        <h3 class="font-bold text-white text-lg flex items-center">✂️ คำสั่งปิดพอร์ตที่ไม่ได้ใช้งาน (Disable Unused Ports)</h3>
+                    </div>
+                    <div class="cli-box p-5 text-sm leading-relaxed">
+                        <span class="cli-comment">! สมมติปิดพอร์ต F0/21 ถึง 24 และ G0/1 ถึง 2</span><br>
+                        Switch(config)# <span class="text-white">interface range f0/21-24, g0/1-2</span><br>
+                        Switch(config-if-range)# <span class="text-white">shutdown</span>
+                    </div>
+                </div>
+
+                <!-- Subnet Table -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-4">
+                        <h3 class="font-bold text-yellow-800 text-lg">📌 ตาราง Subnet Mask (/24 ถึง /30)</h3>
+                    </div>
+                    <div class="overflow-x-auto p-4">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-800 text-white">
+                                    <th class="p-3 border">Prefix</th>
+                                    <th class="p-3 border">Subnet Mask</th>
+                                    <th class="p-3 border">IP ที่ใช้ได้</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-slate-700 font-medium text-sm">
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-3 border font-bold text-blue-600">/24</td>
+                                    <td class="p-3 border">255.255.255.0</td>
+                                    <td class="p-3 border">254</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 bg-slate-50">
+                                    <td class="p-3 border font-bold text-blue-600">/25</td>
+                                    <td class="p-3 border">255.255.255.128</td>
+                                    <td class="p-3 border">126</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-3 border font-bold text-blue-600">/26</td>
+                                    <td class="p-3 border">255.255.255.192</td>
+                                    <td class="p-3 border">62</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 bg-slate-50">
+                                    <td class="p-3 border font-bold text-blue-600">/27</td>
+                                    <td class="p-3 border">255.255.255.224</td>
+                                    <td class="p-3 border">30</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-3 border font-bold text-blue-600">/28</td>
+                                    <td class="p-3 border">255.255.255.240</td>
+                                    <td class="p-3 border">14</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 bg-slate-50">
+                                    <td class="p-3 border font-bold text-blue-600">/29</td>
+                                    <td class="p-3 border">255.255.255.248</td>
+                                    <td class="p-3 border">6</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-3 border font-bold text-blue-600">/30</td>
+                                    <td class="p-3 border">255.255.255.252</td>
+                                    <td class="p-3 border text-red-500 font-bold">2 (Point-to-Point)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= Lab 9 ======================= -->
+        <section id="lab9" class="tab-content max-w-5xl mx-auto">
+            <div class="flex items-center justify-between mb-6 border-b-2 border-slate-200 pb-4">
+                <h2 class="text-3xl font-bold text-slate-800">Lab 9: Switch and VLAN</h2>
+                <span class="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded">Switch 2960</span>
+            </div>
+            
+            <div class="space-y-6">
+                <!-- Task 1 -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+                        <h3 class="font-bold text-blue-800 text-lg flex items-center"><span class="mr-2">📝</span> Task 1: สร้าง VLAN และตั้งชื่อ</h3>
+                    </div>
+                    <div class="cli-box p-5 text-sm leading-relaxed">
+                        Switch> <span class="text-white">enable</span><br>
+                        Switch# <span class="text-white">configure terminal</span><br>
+                        Switch(config)# <span class="text-white">vlan 10</span><br>
+                        Switch(config-vlan)# <span class="text-white">name HR</span><br>
+                        Switch(config-vlan)# <span class="text-white">exit</span>
+                    </div>
+                </div>
+
+                <!-- Task 2 -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+                        <h3 class="font-bold text-blue-800 text-lg flex items-center"><span class="mr-2">📝</span> Task 2: นำพอร์ตเสียบเข้าคอม (Access Port)</h3>
+                    </div>
+                    <div class="cli-box p-5 text-sm leading-relaxed">
+                        Switch(config)# <span class="text-white">interface f0/1</span><br>
+                        Switch(config-if)# <span class="text-white">switchport mode access</span><br>
+                        Switch(config-if)# <span class="text-white">switchport access vlan 10</span>
+                    </div>
+                </div>
+
+                <!-- Task 3 -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+                        <h3 class="font-bold text-blue-800 text-lg flex items-center"><span class="mr-2">📝</span> Task 3: ตั้งค่าพอร์ต Trunk</h3>
+                    </div>
+                    <div class="cli-box p-5 text-sm leading-relaxed">
+                        Switch(config)# <span class="text-white">interface g0/1</span><br>
+                        Switch(config-if)# <span class="text-white">switchport mode trunk</span><br>
+                        <br>
+                        <span class="cli-comment">! ตรวจสอบ</span><br>
+                        Switch# <span class="text-white">show interfaces trunk</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= Lab 10 ======================= -->
+        <section id="lab10" class="tab-content max-w-5xl mx-auto">
+            <div class="flex items-center justify-between mb-6 border-b-2 border-slate-200 pb-4">
+                <h2 class="text-3xl font-bold text-slate-800">Lab 10: VTP & Inter-VLAN Routing</h2>
+                <span class="bg-purple-100 text-purple-800 text-sm font-semibold px-3 py-1 rounded">Switch + Router 1941</span>
+            </div>
+            <div class="space-y-6">
+                <!-- Task 1 -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-purple-50 border-l-4 border-purple-500 p-4">
+                        <h3 class="font-bold text-purple-800 text-lg flex items-center"><span class="mr-2">📝</span> Task 1: ตั้งค่า VTP</h3>
+                    </div>
+                    <div class="cli-box p-5 text-sm leading-relaxed">
+                        <span class="cli-comment">! ที่ Switch ตัวแม่ (Server)</span><br>
+                        Switch(config)# <span class="text-white">vtp mode server</span><br>
+                        Switch(config)# <span class="text-white">vtp domain mydomain</span><br>
+                        <br>
+                        <span class="cli-comment">! ที่ Switch ตัวลูก (Client)</span><br>
+                        Switch(config)# <span class="text-white">vtp mode client</span><br>
+                        Switch(config)# <span class="text-white">vtp domain mydomain</span>
+                    </div>
+                </div>
+
+                <!-- Task 2 -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-purple-50 border-l-4 border-purple-500 p-4">
+                        <h3 class="font-bold text-purple-800 text-lg flex items-center"><span class="mr-2">📝</span> Task 2: Router-on-a-stick</h3>
+                    </div>
+                    <div class="cli-box p-5 text-sm leading-relaxed">
+                        Router(config)# <span class="text-white">interface g0/0</span><br>
+                        Router(config-if)# <span class="text-white">no shutdown</span> <span class="cli-comment">! เปิดพอร์ตหลักก่อน</span><br>
+                        Router(config-if)# <span class="text-white">exit</span><br>
+                        <br>
+                        <span class="cli-comment">! สร้างซับอินเทอร์เฟซสำหรับ VLAN 10</span><br>
+                        Router(config)# <span class="text-white">interface g0/0.10</span><br>
+                        Router(config-subif)# <span class="text-white">encapsulation dot1Q 10</span> <span class="cli-comment">! ต้องทำก่อนใส่ IP</span><br>
+                        Router(config-subif)# <span class="text-white">ip address 192.168.10.1 255.255.255.0</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= Lab 11 ======================= -->
+        <section id="lab11" class="tab-content max-w-5xl mx-auto">
+            <div class="flex items-center justify-between mb-6 border-b-2 border-slate-200 pb-4">
+                <h2 class="text-3xl font-bold text-slate-800">Lab 11: Spanning Tree Protocol (STP)</h2>
+                <span class="bg-amber-100 text-amber-800 text-sm font-semibold px-3 py-1 rounded">Switch Configs</span>
+            </div>
+            <div class="space-y-6">
+                <!-- Task 1 -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-amber-50 border-l-4 border-amber-500 p-4">
+                        <h3 class="font-bold text-amber-800 text-lg flex items-center"><span class="mr-2">📝</span> Task 1: ตั้งค่า Root Bridge และ Bridge IDs</h3>
+                    </div>
+                    <div class="cli-box p-5 text-sm leading-relaxed">
+                        <span class="cli-comment">! วิธีที่ 1: ตั้งเป็น Root หลัก (Primary) หรือ สำรอง (Secondary)</span><br>
+                        Switch(config)# <span class="text-white">spanning-tree vlan 10 root primary</span><br>
+                        Switch(config)# <span class="text-white">spanning-tree vlan 20 root secondary</span><br>
+                        <br>
+                        <span class="cli-comment">! วิธีที่ 2: ระบุค่า Priority เอง</span><br>
+                        <span class="cli-comment">! ค่าที่ใช้ได้: 0, 4096, 8192, 12288, 16384, 20480, 24576, 28672, 32768 (Default),</span><br>
+                        <span class="cli-comment">! 36864, 40960, 45056, 49152, 53248, 57344, 61440</span><br>
+                        Switch(config)# <span class="text-white">spanning-tree vlan 10 priority 4096</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= Lab 12 ======================= -->
+        <section id="lab12" class="tab-content max-w-5xl mx-auto">
+            <div class="flex items-center justify-between mb-6 border-b-2 border-slate-200 pb-4">
+                <h2 class="text-3xl font-bold text-slate-800">Lab 12: Link Aggregation (EtherChannel)</h2>
+                <span class="bg-emerald-100 text-emerald-800 text-sm font-semibold px-3 py-1 rounded">Copy & Paste Ready</span>
+            </div>
+            <div class="space-y-6 flex flex-col lg:flex-row gap-6">
+                
+                <!-- LACP Config -->
+                <div class="flex-1 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+                        <h3 class="font-bold text-blue-800 text-lg flex items-center"><span class="mr-2">🔵</span> 1. LACP (IEEE Standard)</h3>
+                        <p class="text-xs text-slate-600 mt-1">โหมดที่ใช้คู่กันคือ: active - active หรือ active - passive</p>
+                    </div>
+                    <div class="cli-box p-5 text-sm leading-relaxed">
+                        Switch(config)# <span class="text-white">interface range f0/1-2</span><br>
+                        Switch(config-if-range)# <span class="text-white">channel-group 1 mode active</span><br>
+                        Switch(config-if-range)# <span class="text-white">exit</span><br>
+                        <br>
+                        Switch(config)# <span class="text-white">interface port-channel 1</span><br>
+                        Switch(config-if)# <span class="text-white">switchport mode trunk</span><br>
+                        Switch(config-if)# <span class="text-white">exit</span>
+                    </div>
+                </div>
+
+                <!-- PAgP Config -->
+                <div class="flex-1 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-green-50 border-l-4 border-green-500 p-4">
+                        <h3 class="font-bold text-green-800 text-lg flex items-center"><span class="mr-2">🟢</span> 2. PAgP (Cisco Proprietary)</h3>
+                        <p class="text-xs text-slate-600 mt-1">โหมดที่ใช้คู่กันคือ: desirable - desirable หรือ desirable - auto</p>
+                    </div>
+                    <div class="cli-box p-5 text-sm leading-relaxed">
+                        Switch(config)# <span class="text-white">interface range f0/11-12</span><br>
+                        Switch(config-if-range)# <span class="text-white">channel-group 2 mode desirable</span><br>
+                        Switch(config-if-range)# <span class="text-white">exit</span><br>
+                        <br>
+                        Switch(config)# <span class="text-white">interface port-channel 2</span><br>
+                        Switch(config-if)# <span class="text-white">switchport mode trunk</span><br>
+                        Switch(config-if)# <span class="text-white">exit</span>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4 bg-slate-800 text-green-400 p-4 rounded-md font-mono text-sm">
+                <span class="text-slate-400">! คำสั่งตรวจสอบสถานะ EtherChannel</span><br>
+                Switch# <span class="text-white">show etherchannel summary</span>
+            </div>
+        </section>
+
+        <!-- ======================= Lab 13 ======================= -->
+        <section id="lab13" class="tab-content active max-w-5xl mx-auto">
+            <div class="flex items-center justify-between mb-4 border-b-2 border-slate-200 pb-4">
+                <h2 class="text-3xl font-bold text-slate-800">Lab 13: WLC-PT Config & Server Config</h2>
+                <span class="bg-cyan-100 text-cyan-800 text-sm font-semibold px-3 py-1 rounded">GUI In Packet Tracer</span>
+            </div>
+            
+            <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+                <p class="font-bold text-red-700 text-sm flex items-center">
+                    ⚠️ ข้อควรระวัง: การตั้งค่า WLC ในโจทย์นี้ ต้องคลิกที่ตัวอุปกรณ์ "WLC-PT" โดยตรง และใช้เมนูภายในแท็บ "Config" เท่านั้น ไม่ต้องผ่าน Web Browser
+                </p>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Task 1: Server Config -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-cyan-50 border-l-4 border-cyan-500 p-4">
+                        <h3 class="font-bold text-cyan-800 text-lg flex items-center">
+                            <span class="mr-2">🖥️</span> Task 1: การตั้งค่าเครื่อง Server (แท็บ Services)
+                        </h3>
+                        <p class="text-sm text-cyan-700 mt-1">ให้คลิกที่เครื่อง Server ภายในโปรแกรม PT แล้วเลือกแท็บ Services ด้านบน</p>
+                    </div>
+                    <div class="p-6 space-y-6">
+                        
+                        <!-- HTTP -->
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-md border-b pb-1 mb-2">1. การตั้งค่าหน้าเว็บ (HTTP)</h4>
+                            <ul class="list-disc list-inside text-sm text-slate-700 space-y-1">
+                                <li>คลิกที่เมนู <b>HTTP</b> ด้านซ้ายมือ</li>
+                                <li>ตรวจสอบให้แน่ใจว่าทั้ง <b class="text-blue-600">HTTP</b> และ <b class="text-blue-600">HTTPS</b> ถูกเลือกสถานะเป็น <span class="text-green-600 font-bold">On</span>[cite: 7, 8]</li>
+                                <li><i>(สามารถตั้งค่านี้ได้ทั้งเครื่อง SRV1 และ SRV2)</i>[cite: 7, 8]</li>
+                            </ul>
+                        </div>
+
+                        <!-- DHCP -->
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-md border-b pb-1 mb-2">2. การตั้งค่าการแจก IP (DHCP)</h4>
+                            <ul class="list-disc list-inside text-sm text-slate-700 space-y-1">
+                                <li>คลิกที่เมนู <b>DHCP</b> ด้านซ้ายมือ -> เปลี่ยน Service ให้เป็น <span class="text-green-600 font-bold">On</span></li>
+                                <li><b>Pool Name:</b> ใส่ชื่อ Pool (เช่น serverPool)</li>
+                                <li><b>Default Gateway:</b> ใส่ IP Gateway ของ VLAN นั้นๆ</li>
+                                <li><b>DNS Server:</b> ใส่ IP ของเครื่อง Server ตัวที่ทำหน้าที่เป็น DNS</li>
+                                <li><b>Start IP Address</b> และ <b>Subnet Mask:</b> ใส่หมายเลข IP เริ่มต้นที่จะแจก</li>
+                                <li>กดปุ่ม <b>Save</b> ด้านล่าง</li>
+                            </ul>
+                        </div>
+
+                        <!-- AAA / RADIUS -->
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-md border-b pb-1 mb-2">3. การตั้งค่าระบบยืนยันตัวตนสำหรับ Wi-Fi (AAA)</h4>
+                            <ul class="list-disc list-inside text-sm text-slate-700 space-y-1">
+                                <li>คลิกที่เมนู <b>AAA</b> ด้านซ้ายมือ -> เปลี่ยน Service ให้เป็น <span class="text-green-600 font-bold">On</span></li>
+                                <li><b>Network Setup (ตั้งค่าฝั่ง WLC):</b>
+                                    <ul class="list-circle list-inside ml-6 mt-1 text-slate-500">
+                                        <li><b>Client Name:</b> ใส่ชื่อ Client (เช่น WLC)</li>
+                                        <li><b>Client IP:</b> ใส่หมายเลข IP ของเครื่อง WLC</li>
+                                        <li><b>Secret:</b> ใส่รหัสผ่าน Shared Secret (เช่น radius123) -> กด <b>Add</b></li>
+                                        <li><b>Server Type:</b> ให้เลือกเป็น RADIUS</li>
+                                    </ul>
+                                </li>
+                                <li><b>User Setup (สร้าง Username ให้คนเชื่อมต่อ):</b>
+                                    <ul class="list-circle list-inside ml-6 mt-1 text-slate-500">
+                                        <li><b>Username:</b> ใส่ชื่อผู้ใช้ (เช่น user1)</li>
+                                        <li><b>Password:</b> ใส่รหัสผ่าน (เช่น pass123) -> กด <b>Add</b></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Task 2: WLC Config -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+                        <h3 class="font-bold text-blue-800 text-lg flex items-center">
+                            <span class="mr-2">⚙️</span> Task 2: การตั้งค่า WLC-PT (คลิกที่ตัวอุปกรณ์ WLC-PT -> แท็บ Config)
+                        </h3>
+                    </div>
+                    <div class="p-6">
+                        <ol class="list-decimal list-inside space-y-6 text-slate-700 font-medium">
+                            <li class="border-b pb-4">
+                                <b class="text-blue-700 bg-blue-100 px-2 py-1 rounded">การตั้งค่า IP พื้นฐาน (Management):</b>
+                                <ul class="list-disc list-inside ml-6 mt-3 text-sm text-slate-500 font-normal space-y-2">
+                                    <li>ดูที่เมนูซ้ายมือ ภายใต้หัวข้อ <b>INTERFACE</b> -> เลือก <b>Management</b></li>
+                                    <li>ใส่ <b>IPv4 Address, Subnet Mask, Default Gateway, DNS Server</b> ของตัว WLC ตามโจทย์กำหนด</li>
+                                </ul>
+                            </li>
+                            
+                            <li class="border-b pb-4">
+                                <b class="text-blue-700 bg-blue-100 px-2 py-1 rounded">การตั้งค่าแจก IP (DHCP):</b>
+                                <ul class="list-disc list-inside ml-6 mt-3 text-sm text-slate-500 font-normal space-y-2">
+                                    <li>ดูที่เมนูซ้ายมือ ภายใต้หัวข้อ <b>GLOBAL</b> -> เลือก <b>DHCP</b></li>
+                                    <li>ใส่ <b>Pool Name, Default Gateway, DNS Server, Start IP Address</b> และ <b>Subnet Mask</b></li>
+                                    <li>กดปุ่ม <b>Save</b></li>
+                                </ul>
+                            </li>
+
+                            <li class="border-b pb-4">
+                                <b class="text-blue-700 bg-blue-100 px-2 py-1 rounded">การสร้างเครือข่าย Wi-Fi (Wireless LANs):</b>
+                                <ul class="list-disc list-inside ml-6 mt-3 text-sm text-slate-500 font-normal space-y-2">
+                                    <li>ดูที่เมนูซ้ายมือ ภายใต้หัวข้อ <b>GLOBAL</b> -> เลือก <b>Wireless LANs</b></li>
+                                    <li>ใส่ <b>Name</b> และ <b>SSID</b> (เช่น staff-XX)</li>
+                                    <li>หัวข้อ Authentication เลือก <b class="text-red-500">WPA2</b> (สำหรับการเชื่อมต่อแบบ Enterprise/802.1x)</li>
+                                    <li>ภายใต้ <b>RADIUS Server Settings</b> ให้ใส่ <b>IP Address</b> ของ Server และ <b>Shared Secret</b> ให้ตรงกับที่ตั้งไว้ในหน้า AAA</li>
+                                    <li>กดปุ่ม <b>Save</b></li>
+                                </ul>
+                            </li>
+
+                            <li class="pb-2">
+                                <b class="text-blue-700 bg-yellow-200 px-2 py-1 rounded">การจัดกลุ่มการปล่อย SSID (AP Groups):</b>
+                                <ul class="list-disc list-inside ml-6 mt-3 text-sm text-slate-700 font-normal space-y-2">
+                                    <li>ดูที่เมนูซ้ายมือ ภายใต้หัวข้อ <b>GLOBAL</b> -> เลือก <b>AP Groups</b></li>
+                                    <li>ใส่ชื่อกลุ่มในช่อง <b>Name</b> ด้านบน</li>
+                                    <li>ในกล่อง <b>Wireless LANs</b>: เลือก SSID ที่ต้องการให้กลุ่มนี้ปล่อย</li>
+                                    <li>ในกล่อง <b>Access Points</b>: เลือก AP ที่ต้องการให้อยู่ในกลุ่มนี้</li>
+                                    <li>กดปุ่ม <b>Save</b></li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Script for Tab Switching -->
+    <script>
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-item').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add('active');
+        }
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            openTab('lab13');
+        });
+    </script>
+</body>
+</html>
